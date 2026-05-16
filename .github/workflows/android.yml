@@ -1,4 +1,4 @@
-name: Android Build
+name: Android CI
 
 on:
   push:
@@ -9,12 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
+
+ - name: Build debug APK only
+        working-directory: SoundWave
+        run: gradle :app:clean :app:assembleDebug --no-daemon --warning-mode all -x :app:processBenchmarkResources -x :app:mergeBenchmarkNativeLibs
+
 
       - name: Fix missing launcher icons
         run: |
@@ -24,14 +31,17 @@ jobs:
           mkdir -p app/src/main/res/mipmap-xxhdpi
           mkdir -p app/src/main/res/mipmap-xxxhdpi
 
-          BASE64_ICON="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO2Z6FYAAAAASUVORK5CYII="
+          if [ ! -f app/src/main/res/mipmap-mdpi/ic_launcher.png ]; then
+            touch app/src/main/res/mipmap-mdpi/ic_launcher.png
+          fi
 
-          for dir in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            echo $BASE64_ICON | base64 -d > app/src/main/res/mipmap-$dir/ic_launcher.png
-          done
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 
       - name: Grant execute permission
         run: chmod +x gradlew
 
       - name: Build APK
-        run: ./gradlew :app:assembleDebug --no-daemon
+        run: ./gradlew assembleDebug
