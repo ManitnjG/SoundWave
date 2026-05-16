@@ -23,6 +23,23 @@ jobs:
         with:
           gradle-version: 8.6
 
+      - name: Fix missing launcher icons
+        run: |
+          mkdir -p app/src/main/res/mipmap-mdpi
+          mkdir -p app/src/main/res/mipmap-hdpi
+          mkdir -p app/src/main/res/mipmap-xhdpi
+          mkdir -p app/src/main/res/mipmap-xxhdpi
+          mkdir -p app/src/main/res/mipmap-xxxhdpi
+
+          if [ ! -f app/src/main/res/mipmap-mdpi/ic_launcher.png ]; then
+            touch app/src/main/res/mipmap-mdpi/ic_launcher.png
+          fi
+
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          
       - name: Build debug APK only
         working-directory: SoundWave
         run: gradle :app:clean :app:assembleDebug --no-daemon --warning-mode all -x :app:processBenchmarkResources -x :app:mergeBenchmarkNativeLibs
