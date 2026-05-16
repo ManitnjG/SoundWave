@@ -2,7 +2,6 @@ name: Build SoundWave Android Zip
 
 on:
   push:
-    branches: ["**"]
   pull_request:
 
 jobs:
@@ -12,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -22,8 +23,17 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Unzip project
-        run: unzip -o SoundWave-Android-Premium-Music-App.zip
+      - name: Validate ZIP
+        run: |
+          test -f SoundWave-Android-Premium-Music-App.zip
+          file SoundWave-Android-Premium-Music-App.zip
+          unzip -t SoundWave-Android-Premium-Music-App.zip
+
+      - name: Extract project
+        run: |
+          mkdir -p SoundWave
+          bsdtar -xf SoundWave-Android-Premium-Music-App.zip
+          test -d SoundWave
 
       - name: Build app
         working-directory: SoundWave
