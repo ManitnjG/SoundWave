@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SoundWave</string>
+    <string name="notification_channel_name">Music Playback</string>
+    <string name="notification_channel_description">Controls for music playback</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="skip_next">Skip Next</string>
+    <string name="skip_previous">Skip Previous</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="repeat">Repeat</string>
+    <string name="download">Download</string>
+    <string name="downloading">Downloading</string>
+    <string name="downloaded">Downloaded</string>
+    <string name="error_loading">Error loading content</string>
+    <string name="retry">Retry</string>
+</resources>
