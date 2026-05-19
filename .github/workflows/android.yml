@@ -23,24 +23,23 @@ jobs:
         with:
           gradle-version: 8.6
 
-
       - name: Add fallback launcher icons for CI
         working-directory: SoundWave
         run: |
           mkdir -p app/src/main/res/mipmap-anydpi-v26 app/src/main/res/drawable app/src/main/res/values
-          cat > app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml <<'EOF'
+          cat > app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml <<'EOF2'
           <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
               <background android:drawable="@android:color/black" />
               <foreground android:drawable="@drawable/ic_launcher_foreground" />
           </adaptive-icon>
-          EOF
-          cat > app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml <<'EOF'
+          EOF2
+          cat > app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml <<'EOF2'
           <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
               <background android:drawable="@android:color/black" />
               <foreground android:drawable="@drawable/ic_launcher_foreground" />
           </adaptive-icon>
-          EOF
-          cat > app/src/main/res/drawable/ic_launcher_foreground.xml <<'EOF'
+          EOF2
+          cat > app/src/main/res/drawable/ic_launcher_foreground.xml <<'EOF2'
           <vector xmlns:android="http://schemas.android.com/apk/res/android"
               android:width="108dp"
               android:height="108dp"
@@ -48,16 +47,14 @@ jobs:
               android:viewportHeight="108">
               <path android:fillColor="#FFFFFF" android:pathData="M18,18h72v72h-72z"/>
           </vector>
-          EOF
+          EOF2
 
-      - name: Build debug APK only
+      - name: Build debug APK
         working-directory: SoundWave
-        run: gradle :app:clean :app:assembleDebug --no-daemon --warning-mode all  :app:kspDebugKotlin --stacktrace 2>&1 | grep -E "error:|caused by|exception" -i -A 5
+        run: gradle :app:clean :app:assembleDebug :app:kspDebugKotlin --no-daemon --warning-mode all --stacktrace
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: SoundWave/app/build/outputs/apk/debug/app-debug.apk
-
-          
