@@ -52,7 +52,7 @@ jobs:
 
       - name: Build debug APK only
         working-directory: SoundWave
-        run: gradle :app:clean :app:assembleDebug --no-daemon --warning-mode all  :app:kspDebugKotlin --stacktrace 2>&1 | grep -E "error:|caused by|exception" -i -A 5
+        run: gradle :app:clean :app:assembleDebug --no-daemon --warning-mode all --stacktrace
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
